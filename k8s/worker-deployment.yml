@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workersidecar
+  labels:
+    app: workersidecar
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: workersidecar
+      labels:
+        app: workersidecar
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+        - name: workersidecar
+          image: nileshgule/dnc-worker
+          env:
+            - name: "WebApp"
+              value: "http://simpleweb/healthy"
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 256Mi
+  selector:
+    matchLabels:
+      app: workersidecar

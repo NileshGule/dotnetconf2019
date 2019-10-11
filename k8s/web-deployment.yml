@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleweb
+  labels:
+    app: simpleweb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: simpleweb
+      labels:
+        app: simpleweb
+    spec:
+      containers:
+        - name: simpleweb
+          image: nileshgule/dnc-web
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 1
+            requests:
+              memory: 256Mi
+  selector:
+    matchLabels:
+      app: simpleweb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simpleweb
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+  selector:
+    app: simpleweb
