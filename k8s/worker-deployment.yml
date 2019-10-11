@@ -20,11 +20,19 @@ spec:
           env:
             - name: "WebApp"
               value: "http://simpleweb/healthy"
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
           resources:
             limits:
               memory: 512Mi
             requests:
               memory: 256Mi
+      volumes:
+        - name: secrets
+          secret:
+            secretName: secret-appsettings
   selector:
     matchLabels:
       app: workersidecar

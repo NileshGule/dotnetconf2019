@@ -20,6 +20,7 @@ namespace dnc_worker
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets/appsettings.secrets.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -27,7 +28,7 @@ namespace dnc_worker
             var logStorageAccount = CloudStorageAccount.Parse(Configuration.GetConnectionString("Storage"));
 
             Log.Logger = new LoggerConfiguration()
-                //.WriteTo.Console()
+                // .WriteTo.Console()
                 .WriteTo.AzureTableStorage(logStorageAccount, LogEventLevel.Verbose, null, "helloworker", false, null, null, null)
                 .MinimumLevel.Debug()
                 .Enrich.FromLogContext()
